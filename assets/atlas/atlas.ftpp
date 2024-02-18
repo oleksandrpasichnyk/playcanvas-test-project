@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "version": "0.6.7"
+  },
+  "savePath": "E:\\docs\\my\\programming\\PlayCanvas\\Test project\\assets\\atlas",
+  "images": [],
+  "folders": [
+    "E:/docs/my/programming/PlayCanvas/Test project/assets/icons"
+  ],
+  "packOptions": {
+    "textureName": "atlas",
+    "textureFormat": "png",
+    "removeFileExtension": true,
+    "prependFolderName": true,
+    "base64Export": false,
+    "tinify": false,
+    "tinifyKey": "",
+    "scale": 1,
+    "filter": "none",
+    "exporter": "custom",
+    "fileName": "pack-result",
+    "savePath": "E:\\docs\\my\\programming\\PlayCanvas\\Test project\\assets\\atlas",
+    "width": 2048,
+    "height": 2048,
+    "fixedSize": false,
+    "powerOfTwo": false,
+    "padding": 0,
+    "extrude": 0,
+    "allowRotation": true,
+    "allowTrim": true,
+    "trimMode": "trim",
+    "alphaThreshold": "0",
+    "detectIdentical": true,
+    "packer": "MaxRectsBin",
+    "packerMethod": "BestShortSideFit"
+  }
+}
