@@ -1,7 +1,8 @@
 import * as pc from "playcanvas";
-import AssetsHelper from "../libs/assets-helper.js";
+import AssetsHelper from "../../libs/assets-helper.js";
+import SceneAbstract from "./scene-abstract.js";
 
-export default class Scene2 extends pc.Entity {
+export default class Scene2 extends SceneAbstract {
   constructor() {
     super();
 
@@ -33,7 +34,7 @@ export default class Scene2 extends pc.Entity {
       [0, 0, 0.1, 0.25, 0.4, 0.65, 1, 0.4],
       [0, 0, 1, 0],
     ]);
-    
+
     const localVelocityCurve2 = new pc.CurveSet([
       [0, 0, 0.1, -0.25, 0.4, -0.65, 1, -0.4],
       [0, 0, 0.1, -0.25, 0.4, -0.65, 1, -0.4],

@@ -2,7 +2,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyPlugin from "copy-webpack-plugin";
 
 const webpackCommon = {
-    entry: './src/js/index.js',
+    entry: './src/js/game.js',
     
     plugins:
     [

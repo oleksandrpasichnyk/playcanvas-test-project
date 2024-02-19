@@ -1,8 +1,9 @@
 import * as pc from 'playcanvas';
 import * as CANNON from 'cannon';
-import MaterialsHelper from '../libs/materials-helper.js';
+import MaterialsHelper from '../../libs/materials-helper.js';
+import SceneAbstract from './scene-abstract.js';
 
-export default class Scene3 extends pc.Entity {
+export default class Scene3 extends SceneAbstract {
   constructor(app, world) {
     super();
 
@@ -26,10 +27,18 @@ export default class Scene3 extends pc.Entity {
   }
 
   _onMouseDown(event) {
+    if(!this.enabled) {
+      return;
+    }
+
     this._mouseDownTime = Date.now();
   }
 
   _onMouseUp(event) {
+    if(!this.enabled) {
+      return;
+    }
+
     const holdDuration = Date.now() - this._mouseDownTime;
 
     const cameraEntity = this._app.root.findByName('Camera');
@@ -97,6 +106,10 @@ export default class Scene3 extends pc.Entity {
 
 
   update() {
+    if(!this.enabled) {
+      return;
+    }
+
     if (this._boxes.length > 0) {
       this._boxes.forEach(boxData => {
         const { boxEntity, boxBody } = boxData;

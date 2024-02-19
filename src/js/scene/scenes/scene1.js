@@ -1,8 +1,9 @@
 import * as pc from "playcanvas";
-import MaterialsHelper from "../libs/materials-helper.js";
+import MaterialsHelper from "../../libs/materials-helper.js";
 import * as lil from 'lil-gui';
+import SceneAbstract from "./scene-abstract.js";
 
-export default class Scene1 extends pc.Entity {
+export default class Scene1 extends SceneAbstract {
   constructor() {
     super();
 
@@ -11,7 +12,21 @@ export default class Scene1 extends pc.Entity {
     this._spheresContainer = null;
     this._spheresContainerRadius = 0.5;
 
+    this._gui = null;
+
     this._init();
+  }
+
+  enable() {
+    super.enable();
+    
+    this._gui.show();
+  }
+
+  disable() {
+    super.disable();
+    
+    this._gui.hide();
   }
 
   _init() {
@@ -21,7 +36,7 @@ export default class Scene1 extends pc.Entity {
   }
 
   _initGUI() {
-    const gui = new lil.GUI();
+    const gui = this._gui = new lil.GUI();
 
     gui.add(this, '_spheresCount', 1, 50, 1).name('Spheres count:');
     gui.add({ apply: () => this._applySphereCount(this._spheresCount) }, 'apply').name('Apply');
@@ -123,6 +138,10 @@ export default class Scene1 extends pc.Entity {
   }
 
   _applySphereCount(count) {
+    if(!this._isEnable) {
+      return;
+    }
+
     console.log(this._spheresPool.length)
 
     this._setSpheresCount(count);

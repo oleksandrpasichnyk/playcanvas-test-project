@@ -4,10 +4,10 @@ import * as pc from "playcanvas";
 import * as CANNON from "cannon";
 import CannonDebugger from "cannon-es-debugger";
 
-import UIGroup from "./ui-container.js";
-import Loader from "./loader.js";
+import UIGroup from "./ui/ui-container.js";
+import Loader from "./loader/loader.js";
 import AssetsHelper from "./libs/assets-helper.js";
-import GameScene from "./scene.js";
+import GameScene from "./scene/scene.js";
 
 
 // import './libs/orbit-camera.js';
@@ -29,8 +29,10 @@ export default class Game {
 
     const app = (this._app = new pc.Application(canvas, {
       keyboard: new pc.Keyboard(window),
-      mouse: new pc.Mouse(canvas),
-      touch: new pc.TouchDevice(canvas),
+      mouse: new pc.Mouse(document.body),
+
+      touch: new pc.TouchDevice(document.body),
+      elementInput: new pc.ElementInput(canvas),
       resourceHandlers: [
         // @ts-ignore
         pc.TextureHandler,
@@ -65,8 +67,13 @@ export default class Game {
 
     setTimeout(() => {
       this._initPhysics();
-      this._initUI();
       this._initScene();
+      this._initUI();
+
+      this._app.mouse.on(pc.EVENT_MOUSEDOWN, () => {
+        // this._UI.onStarted();
+        // this._gameScene.setScene(1);
+      })
 
       app.start();
     }, 1000);
@@ -74,17 +81,16 @@ export default class Game {
 
   _resize(canvas) {
     this._app.resizeCanvas(canvas.width, canvas.height);
-    // app.resizeCanvas(canvas.width, canvas.height);
   }
 
   _initUI() {
-    // const app = this._app;
-    // const uiEntity = new UIGroup(app, this._assets);
-    // app.root.addChild(uiEntity);
+    const app = this._app;
+    const UI = this._UI = new UIGroup(app, this._assets);
+    app.root.addChild(UI);
   }
 
   _initScene() {
-    const scene = new GameScene(this._app, this._physicsWorld);
+    const scene = this._gameScene = new GameScene(this._app, this._physicsWorld);
     this._app.root.addChild(scene);
   }
 
