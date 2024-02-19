@@ -5,6 +5,7 @@ import UIGroup from './ui-container.js';
 import Loader from './loader.js';
 import AssetsHelper from './libs/assets-helper.js';
 import Scene1 from './scene/scene1.js';
+import Scene2 from './scene/scene2.js';
 // import './libs/orbit-camera.js';
 
 export default class Game {
@@ -43,14 +44,13 @@ export default class Game {
     window.addEventListener('resize', () => this._resize(canvas));
     app.on("update", (dt) => this.update(dt));
 
-    this._initScene();
     this._initLight();
     this._initCamera();
-
+    
     new Loader(app);
-
+    
     setTimeout(() => {
-      
+      this._initScene();
       this._initUI();
       app.start();
     }, 1000);
@@ -70,7 +70,7 @@ export default class Game {
   }
 
   _initScene() {
-    const scene = new Scene1();
+    const scene = new Scene2();
     this._app.root.addChild(scene); 
   }
 

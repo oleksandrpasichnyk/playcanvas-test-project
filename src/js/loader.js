@@ -38,10 +38,10 @@ export default class Loader {
     app.assets.load(fontAsset);
   }
 
-  _loadImage(path) {
+  _loadImage(name, path) {
     const app = this._app;
 
-    const iconAsset = new pc.Asset(path, 'texture', {
+    const iconAsset = new pc.Asset(name, 'texture', {
       url: 'icons/' + path
     });
     app.assets.add(iconAsset);
@@ -58,11 +58,12 @@ export default class Loader {
       coin: 'coin.png',
       diamond: 'diamond.png',
       bg: 'bg.png',
+      particle: 'particle.png',
     }
 
     for (const imageName in images) {
       const imagePath = images[imageName];
-      this._loadImage(imagePath)
+      this._loadImage(imageName, imagePath)
     }
   }
 }
