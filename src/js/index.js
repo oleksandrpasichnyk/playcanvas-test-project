@@ -2,6 +2,8 @@ import '../style.css';
 
 import * as pc from 'playcanvas';
 import * as CANNON from 'cannon';
+import CannonDebugger from 'cannon-es-debugger';
+
 import UIGroup from './ui-container.js';
 import Loader from './loader.js';
 import AssetsHelper from './libs/assets-helper.js';
@@ -50,8 +52,8 @@ export default class Game {
 
     app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
-    app.scene.exposure = 10;
-    app.scene.skyboxMip = 20;
+    app.scene.exposure = 0.8;
+    // app.scene.skyboxMip = 20;
 
     AssetsHelper.registerApp(app);
 
@@ -67,6 +69,13 @@ export default class Game {
       this._initPhysics();
       this._initUI();
       this._initScene();
+
+      const cannonDebugger = this._cannonDebugger = new CannonDebugger(app.scene, this._physicsWorld, {
+        color: 0x00ff00,
+        scale: 1.0,
+        autoUpdate: true // Automatically update the debugger on each frame
+      });
+
       app.start();
 
     }, 1000);
@@ -99,7 +108,7 @@ export default class Game {
   }
 
   _initCamera() {
-    const camera = new pc.Entity('camera');
+    const camera = new pc.Entity('Camera');
     camera.addComponent('camera', {
       clearColor: new pc.Color(0.1, 0.1, 0.1)
     });
@@ -116,8 +125,8 @@ export default class Game {
     // }
 
     this._app.root.addChild(camera);
-    camera.setPosition(1, 0.3, 3);
-    camera.lookAt(0, 0, 0);
+    camera.setPosition(0, 1, 3);
+    camera.lookAt(0, 0.5, 0);
   }
 
   _initLight() {
@@ -143,7 +152,7 @@ export default class Game {
 
     this._timer += dt;
 
-    
+    // this._cannonDebugger.update();
   }
 }
 
