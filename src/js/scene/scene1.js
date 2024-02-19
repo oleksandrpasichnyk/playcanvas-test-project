@@ -1,36 +1,37 @@
-import * as pc from 'playcanvas';
+import * as pc from "playcanvas";
+import MaterialsHelper from "../libs/materials-helper.js";
+import * as lil from 'lil-gui';
 
 export default class Scene1 extends pc.Entity {
   constructor() {
     super();
 
+    this._spheresCount = 5;
+    this._spheresPool = [];
+    this._spheresContainer = null;
+    this._spheresContainerRadius = 0.5;
+
     this._init();
   }
 
   _init() {
+    this._initGUI();
     this._initCubes();
     this._initSpheres();
-    // const Rotate = pc.createScript('rotate');
-    // Rotate.prototype.update = function (dt) {
-    //   this.entity.rotate(10 * dt, 20 * dt, 30 * dt);
-    // };
+  }
 
-    // const box = new pc.Entity('cube');
-    // box.addComponent('model', {
-    //   type: 'box'
-    // });
+  _initGUI() {
+    const gui = new lil.GUI();
 
-    // box.addComponent('script');
-    // box.script.create('rotate');
-
-    // this.addChild(box);
+    gui.add(this, '_spheresCount', 1, 50, 1).name('Spheres count:');
+    gui.add({ apply: () => this._applySphereCount(this._spheresCount) }, 'apply').name('Apply');
   }
 
   _initCubes() {
     const count = 5;
     const offset = -0.2;
 
-    const cubes = new pc.Entity('cubes');
+    const cubes = new pc.Entity("cubes");
 
     for (let i = 0; i < count; i++) {
       const cube = this._createCube();
@@ -44,71 +45,87 @@ export default class Scene1 extends pc.Entity {
 
     this.addChild(cubes);
 
-    cubes.setPosition(-0.2, 0, 0);
+    cubes.setPosition(-0.4, 0.5, 0);
   }
 
   _createCube() {
-    const box = new pc.Entity('cube');
-    box.addComponent('model', {
-      type: 'box',
+    const box = new pc.Entity("cube");
+    box.addComponent("model", {
+      type: "box",
     });
 
-    var material = new pc.StandardMaterial();
-
-    material.diffuse = new pc.Color(1, 0, 0); // Red, for example
-    
-    material.update();
-
-    box.model.material = material;
+    box.model.material = MaterialsHelper.createMaterial(new pc.Color(1, 0, 0));
 
     return box;
   }
 
   _initSpheres() {
-    const count = 6;
-    const r = 0.5;
-
-    const spheres = new pc.Entity('spheres');
-
-    for (let i = 0; i < count; i++) {
-      const sphere = this._createSphere();
-
-      const s = Math.min(2 * Math.PI * r / count * 0.5, 0.3);
-      sphere.setLocalScale(s, s, s);
-
-      const alpha = (Math.PI * 2 / count) * i + Math.PI * 0.5;
-
-      sphere.setLocalPosition(Math.cos(alpha) * r, Math.sin(alpha) * r, 0);
-      spheres.addChild(sphere);
-    }
-
+    const spheres = this._spheresContainer = new pc.Entity("spheres");
     this.addChild(spheres);
 
-    spheres.setPosition(0.8, 0, 0);
+    spheres.setPosition(0.8, 0.5, 0);
 
-    const Rotate = pc.createScript('rotate');
+    const Rotate = pc.createScript("rotate");
     Rotate.prototype.update = function (dt) {
       this.entity.rotate(0, 0, 30 * dt);
     };
 
-    spheres.addComponent('script');
-    spheres.script.create('rotate');
+    spheres.addComponent("script");
+    spheres.script.create("rotate");
+
+    this._setSpheresCount();
+    this._setSpheresPositions();
+  }
+
+  _setSpheresCount(count = this._spheresCount) {
+    const r = this._spheresContainerRadius;
+
+    if(count > this._spheresPool.length) {
+      const diff = count - this._spheresPool.length;
+
+      for (let i = 0; i < diff; i++) {
+        this._createSphere();        
+      }
+    }
+
+    this._spheresPool.forEach(s => s.enabled = false);
+
+    for (let i = 0; i < count; i++) {
+      const sphere = this._spheresPool[i];
+      sphere.enabled = true;
+
+      const s = Math.min(((2 * Math.PI * r) / count) * 0.5, 0.3);
+      sphere.setLocalScale(s, s, s);      
+    }
+  }
+
+  _setSpheresPositions() {
+    const r = this._spheresContainerRadius;
+
+    this._spheresPool.forEach((sphere, i) => {
+      const angle = ((Math.PI * 2) / this._spheresCount) * i + Math.PI * 0.5;
+
+      sphere.setLocalPosition(Math.cos(angle) * r, Math.sin(angle) * r, 0);
+    })
   }
 
   _createSphere() {
-    const box = new pc.Entity('sphere');
-    box.addComponent('model', {
-      type: 'sphere',
+    const sphere = new pc.Entity("sphere");
+    sphere.addComponent("model", {
+      type: "sphere",
     });
 
-    var material = new pc.StandardMaterial();
+    sphere.model.material = MaterialsHelper.createMaterial(new pc.Color(0, 1, 0));
+    this._spheresPool.push(sphere);
+    this._spheresContainer.addChild(sphere);
 
-    material.diffuse = new pc.Color(0, 1, 0); // Red, for example
-    
-    material.update();
+    return sphere;
+  }
 
-    box.model.material = material;
+  _applySphereCount(count) {
+    console.log(this._spheresPool.length)
 
-    return box;
+    this._setSpheresCount(count);
+    this._setSpheresPositions();
   }
 }

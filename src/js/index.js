@@ -1,15 +1,14 @@
-import '../style.css';
+import "../style.css";
 
-import * as pc from 'playcanvas';
-import * as CANNON from 'cannon';
-import CannonDebugger from 'cannon-es-debugger';
+import * as pc from "playcanvas";
+import * as CANNON from "cannon";
+import CannonDebugger from "cannon-es-debugger";
 
-import UIGroup from './ui-container.js';
-import Loader from './loader.js';
-import AssetsHelper from './libs/assets-helper.js';
-import Scene1 from './scene/scene1.js';
-import Scene2 from './scene/scene2.js';
-import Scene3 from './scene/scene3.js';
+import UIGroup from "./ui-container.js";
+import Loader from "./loader.js";
+import AssetsHelper from "./libs/assets-helper.js";
+import GameScene from "./scene.js";
+
 
 // import './libs/orbit-camera.js';
 
@@ -17,7 +16,6 @@ export default class Game {
   constructor() {
     this._canvas = null;
     this._app = null;
-    this._timer = 0;
     this._assets = null;
 
     this._enableOrbit = true;
@@ -26,10 +24,10 @@ export default class Game {
   }
 
   async _init() {
-    const canvas = this._canvas = document.createElement('canvas');
+    const canvas = (this._canvas = document.createElement("canvas"));
     document.body.appendChild(canvas);
 
-    const app = this._app = new pc.Application(canvas, {
+    const app = (this._app = new pc.Application(canvas, {
       keyboard: new pc.Keyboard(window),
       mouse: new pc.Mouse(canvas),
       touch: new pc.TouchDevice(canvas),
@@ -37,7 +35,7 @@ export default class Game {
         // @ts-ignore
         pc.TextureHandler,
         // @ts-ignore
-        pc.FontHandler
+        pc.FontHandler,
       ],
       componentSystems: [
         pc.RenderComponentSystem,
@@ -46,9 +44,9 @@ export default class Game {
         pc.ScriptComponentSystem,
         pc.CollisionComponentSystem,
         pc.RigidBodyComponentSystem,
-        pc.AnimComponentSystem
-      ]
-    });
+        pc.AnimComponentSystem,
+      ],
+    }));
 
     app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
@@ -57,7 +55,7 @@ export default class Game {
 
     AssetsHelper.registerApp(app);
 
-    window.addEventListener('resize', () => this._resize(canvas));
+    window.addEventListener("resize", () => this._resize(canvas));
     app.on("update", (dt) => this.update(dt));
 
     this._initLight();
@@ -70,37 +68,28 @@ export default class Game {
       this._initUI();
       this._initScene();
 
-      const cannonDebugger = this._cannonDebugger = new CannonDebugger(app.scene, this._physicsWorld, {
-        color: 0x00ff00,
-        scale: 1.0,
-        autoUpdate: true // Automatically update the debugger on each frame
-      });
-
       app.start();
-
     }, 1000);
   }
 
   _resize(canvas) {
     this._app.resizeCanvas(canvas.width, canvas.height);
     // app.resizeCanvas(canvas.width, canvas.height);
-
   }
 
   _initUI() {
     // const app = this._app;
-
     // const uiEntity = new UIGroup(app, this._assets);
     // app.root.addChild(uiEntity);
   }
 
   _initScene() {
-    const scene = new Scene3(this._app, this._physicsWorld);
-    this._app.root.addChild(scene); 
+    const scene = new GameScene(this._app, this._physicsWorld);
+    this._app.root.addChild(scene);
   }
 
   _initPhysics() {
-    const world = this._physicsWorld = new CANNON.World();
+    const world = (this._physicsWorld = new CANNON.World());
     world.gravity.set(0, -9.82, 0); // Set gravity to pull objects toward the negative Y axis
 
     world.solver.iterations = 10;
@@ -108,21 +97,10 @@ export default class Game {
   }
 
   _initCamera() {
-    const camera = new pc.Entity('Camera');
-    camera.addComponent('camera', {
-      clearColor: new pc.Color(0.1, 0.1, 0.1)
+    const camera = new pc.Entity("Camera");
+    camera.addComponent("camera", {
+      clearColor: new pc.Color(0.1, 0.1, 0.1),
     });
-
-    // if(this._enableOrbit) {
-    //   camera.addComponent("script");
-    //   camera.script.create("orbitCamera", {
-    //       attributes: {
-    //           inertiaFactor: 0.2
-    //       }
-    //   });
-    //   camera.script.create("orbitCameraInputMouse");
-    //   camera.script.create("orbitCameraInputTouch");
-    // }
 
     this._app.root.addChild(camera);
     camera.setPosition(0, 1, 3);
@@ -130,8 +108,8 @@ export default class Game {
   }
 
   _initLight() {
-    const light = new pc.Entity('light');
-    light.addComponent('light', {
+    const light = new pc.Entity("light");
+    light.addComponent("light", {
       type: "directional",
       color: new pc.Color(1, 1, 1),
       intensity: 1,
@@ -140,8 +118,8 @@ export default class Game {
     this._app.root.addChild(light);
     light.setEulerAngles(45, 0, 0);
 
-    const light2 = new pc.Entity('light');
-    light2.addComponent('light');
+    const light2 = new pc.Entity("light");
+    light2.addComponent("light");
 
     this._app.root.addChild(light2);
     light2.setEulerAngles(0, 45, 0);
@@ -149,13 +127,9 @@ export default class Game {
 
   update(dt) {
     this._physicsWorld?.step(dt);
-
-    this._timer += dt;
-
-    // this._cannonDebugger.update();
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   new Game();
 });

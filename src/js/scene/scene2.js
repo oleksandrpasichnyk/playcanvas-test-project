@@ -1,5 +1,5 @@
-import * as pc from 'playcanvas';
-import AssetsHelper from '../libs/assets-helper.js';
+import * as pc from "playcanvas";
+import AssetsHelper from "../libs/assets-helper.js";
 
 export default class Scene2 extends pc.Entity {
   constructor() {
@@ -9,9 +9,13 @@ export default class Scene2 extends pc.Entity {
   }
 
   _init() {
-    const colors = [new pc.Color(191/256, 219/256, 242/256), new pc.Color(111/256, 216/256, 216/256), new pc.Color(28/256, 103/256, 114/256)];
+    const colors = [
+      new pc.Color(191 / 256, 219 / 256, 242 / 256),
+      new pc.Color(111 / 256, 216 / 256, 216 / 256),
+      new pc.Color(28 / 256, 103 / 256, 114 / 256),
+    ];
 
-    const entity = new pc.Entity('Sparks');
+    const entity = new pc.Entity("Sparks");
     this.addChild(entity);
     entity.setLocalPosition(0, 0, 0);
 
@@ -27,32 +31,29 @@ export default class Scene2 extends pc.Entity {
     const localVelocityCurve = new pc.CurveSet([
       [0, 0, 0.1, 0.25, 0.4, 0.65, 1, 0.4],
       [0, 0, 0.1, 0.25, 0.4, 0.65, 1, 0.4],
-      [0, 0, 1, 0]
+      [0, 0, 1, 0],
     ]);
+    
     const localVelocityCurve2 = new pc.CurveSet([
       [0, 0, 0.1, -0.25, 0.4, -0.65, 1, -0.4],
       [0, 0, 0.1, -0.25, 0.4, -0.65, 1, -0.4],
-      [0, 0, 1, 0]
+      [0, 0, 1, 0],
     ]);
 
-    const scaleCurve = new pc.Curve(
-      [0, 0, 0.15, 0.02, 0.5, 0.03, 1, 0]
-    );
+    const scaleCurve = new pc.Curve([0, 0, 0.15, 0.02, 0.5, 0.03, 1, 0]);
 
-    const alphaCurve = new pc.Curve(
-      [0, 1, 0.7, 0.6, 1, 0]
-    );
+    const alphaCurve = new pc.Curve([0, 1, 0.7, 0.6, 1, 0]);
 
     const { r, g, b } = startColor;
 
     const colorCurve = new pc.CurveSet([
       [0, r, 0.4, r, 1, 1],
       [0, g, 0.4, g, 1, 1],
-      [0, b, 0.4, b, 1, 1]
+      [0, b, 0.4, b, 1, 1],
     ]);
 
-    const image = AssetsHelper.getAssetByName('particle', 'texture');
-    const image2 = AssetsHelper.getAssetByName('bg', 'texture');
+    const image = AssetsHelper.getAssetByName("particle", "texture");
+    const image2 = AssetsHelper.getAssetByName("bg", "texture");
 
     particleSystem.addComponent("particlesystem", {
       numParticles: 200,
@@ -69,7 +70,6 @@ export default class Scene2 extends pc.Entity {
       animNumFrames: 4,
       randomizeAnimIndex: false,
       animSpeed: 1,
-
 
       localVelocityGraph: localVelocityCurve,
       localVelocityGraph2: localVelocityCurve2,

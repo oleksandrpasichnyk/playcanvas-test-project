@@ -59,6 +59,7 @@ export default class Loader {
       diamond: 'diamond.png',
       bg: 'bg.png',
       particle: 'particle.png',
+      arrow: 'arrow.png',
     }
 
     for (const imageName in images) {
