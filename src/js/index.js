@@ -1,6 +1,7 @@
 import '../style.css';
 
 import * as pc from 'playcanvas';
+import * as CANNON from 'cannon';
 import UIGroup from './ui-container.js';
 import Loader from './loader.js';
 import AssetsHelper from './libs/assets-helper.js';
@@ -26,7 +27,7 @@ export default class Game {
     const canvas = this._canvas = document.createElement('canvas');
     document.body.appendChild(canvas);
 
-    const app = this._app = new pc.Application(canvas,     {
+    const app = this._app = new pc.Application(canvas, {
       keyboard: new pc.Keyboard(window),
       mouse: new pc.Mouse(canvas),
       touch: new pc.TouchDevice(canvas),
@@ -59,14 +60,13 @@ export default class Game {
 
     this._initLight();
     this._initCamera();
-    
-    new Loader(app);
-    
-    setTimeout(() => {
-      this._initScene();
-      this._initUI();
 
+    new Loader(app);
+
+    setTimeout(() => {
       this._initPhysics();
+      this._initUI();
+      this._initScene();
       app.start();
 
     }, 1000);
@@ -79,19 +79,23 @@ export default class Game {
   }
 
   _initUI() {
-    const app = this._app;
+    // const app = this._app;
 
-    const uiEntity = new UIGroup(app, this._assets);
-    app.root.addChild(uiEntity);
+    // const uiEntity = new UIGroup(app, this._assets);
+    // app.root.addChild(uiEntity);
   }
 
   _initScene() {
-    const scene = new Scene3(this._app);
+    const scene = new Scene3(this._app, this._physicsWorld);
     this._app.root.addChild(scene); 
   }
 
   _initPhysics() {
-    this._app.systems.rigidbody.gravity.set(0, -9.81, 0);
+    const world = this._physicsWorld = new CANNON.World();
+    world.gravity.set(0, -9.82, 0); // Set gravity to pull objects toward the negative Y axis
+
+    world.solver.iterations = 10;
+    world.broadphase = new CANNON.NaiveBroadphase();
   }
 
   _initCamera() {
@@ -122,7 +126,7 @@ export default class Game {
       type: "directional",
       color: new pc.Color(1, 1, 1),
       intensity: 1,
-  });
+    });
 
     this._app.root.addChild(light);
     light.setEulerAngles(45, 0, 0);
@@ -135,7 +139,11 @@ export default class Game {
   }
 
   update(dt) {
+    this._physicsWorld?.step(dt);
+
     this._timer += dt;
+
+    
   }
 }
 
