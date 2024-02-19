@@ -1,4 +1,5 @@
 import * as pc from 'playcanvas';
+import IconButton from './ui/elements/icon-button.js';
 
 export default class MyUIElement extends pc.Entity {
     constructor(app, assets) {
@@ -9,17 +10,10 @@ export default class MyUIElement extends pc.Entity {
         this.screen1 = null;
         this.screen2 = null;
 
-        this._init();
+        // this._init();
     }
 
     _init() {
-        // var jsonAsset = null;
-        // fetch(jsonAsset.getFileUrl())
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data);
-        //     });
-
         this.addComponent("screen", {
             referenceResolution: new pc.Vec2(1280, 720),
             scaleBlend: 0.5,
@@ -27,38 +21,26 @@ export default class MyUIElement extends pc.Entity {
             screenSpace: true
         });
 
-        const button = new pc.Entity();
-        button.addComponent("button");
-        button.addComponent("element", {
-            anchor: [0.5, 0.5, 0.5, 0.5], // Center the button
-            color: new pc.Color(1, 0, 0), // Red color
-            height: 40,
-            pivot: [0.5, 0.5],
-            type: pc.ELEMENTTYPE_IMAGE,
-            width: 175,
-            useInput: true // Make the button interactive
+        const settingsBtn = this._settingsBtn = new IconButton('settings.png');
+        this.addChild(settingsBtn);
+        // settingsBtn.element.anchor.set(0.1, 0.9, 0, 1); // Anchors to the top-left corner
+
+        window.addEventListener('resize', () => {
+            settingsBtn.localPosition.x = 0;
+            settingsBtn.localPosition.y = this._app.graphicsDevice.height * 0.5; // Top of the screen
+            // settingsBtn.setAnchor(pc.ANCHOR_TOP_LEFT);
+            // settingsBtn.element.anchor.set(0.1, 1, 0, 1); // Anchors to the top-left corner
         });
 
-        // Add the button as a child of 'this' entity, which has the screen component
-        this.addChild(button);
+        // settingsBtn.element.anchor.set(0.1, 0.9, 0, 1); // Anchors to the top-left corner
+        // settingsBtn.element.pivot.set(0, 0.5); // Pivot at the top-left of the element
 
-        console.log("this._app.assets", this._app.assets)
-        // Create a label for the button
-        const label = new pc.Entity();
-        label.addComponent("element", {
-            anchor: [0.5, 0.5, 0.5, 0.5],
-            color: new pc.Color(0, 0, 0),
-            // fontName: "font", //this._app.assets.font.id,
-            fontAsset: this._app.assets.find('Arial', 'font'),
-            fontSize: 32,
-            height: 64,
-            pivot: [0.5, 0.5],
-            text: "CLICK ME",
-            type: pc.ELEMENTTYPE_TEXT,
-            width: 128,
-            wrapLines: true
-        });
-        button.addChild(label);
+        // settingsBtn.setPosition(0, 0);
+
+        // const appWidth = this._app.graphicsDevice.width;
+        // const appHeight = this._app.graphicsDevice.width;
+
+        // settingsBtn.setLocalPosition(0, 0);
     }
 
     update(dt) {

@@ -3,6 +3,7 @@ import CopyPlugin from "copy-webpack-plugin";
 
 const webpackCommon = {
     entry: './src/js/index.js',
+    
     plugins:
     [
         new HtmlWebpackPlugin({
@@ -18,6 +19,7 @@ const webpackCommon = {
                 { from: "assets/fonts", to: "fonts" },
                 { from: "assets/atlas", to: "atlas" },
                 { from: "assets/icons", to: "icons" },
+                { from: "assets/scripts", to: "scripts" },
             ],
         }),
     ],
@@ -31,6 +33,7 @@ const webpackCommon = {
             },
             {
                 test: /\.js$/, // Regular expression to match all .js files
+                include: /src/,
                 exclude: /node_modules/, // Exclude the node_modules directory
                 use: {
                   loader: 'babel-loader',

@@ -3,6 +3,9 @@ import '../style.css';
 import * as pc from 'playcanvas';
 import UIGroup from './ui-container.js';
 import Loader from './loader.js';
+import AssetsHelper from './libs/assets-helper.js';
+import Scene1 from './scene/scene1.js';
+// import './libs/orbit-camera.js';
 
 export default class Game {
   constructor() {
@@ -10,6 +13,8 @@ export default class Game {
     this._app = null;
     this._timer = 0;
     this._assets = null;
+
+    this._enableOrbit = true;
 
     this._init();
   }
@@ -33,38 +38,28 @@ export default class Game {
     app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
-    window.addEventListener('resize', () => this._resize());
+    AssetsHelper.registerApp(app);
+
+    window.addEventListener('resize', () => this._resize(canvas));
     app.on("update", (dt) => this.update(dt));
 
-    // this._initScene();
-    this._initCamera();
+    this._initScene();
     this._initLight();
+    this._initCamera();
 
     new Loader(app);
 
-    // const assetListLoader = new pc.AssetListLoader(Object.values(this._assets), app.assets);
-    // assetListLoader.load(() => {
-    //   this._initUI();
-
-    //   console.log(app.assets)
-
-    //   app.start();
-    // });
-
-    // var fontJsonUrl = 'fonts/courier.json'; // The path to your JSON font file relative to index.js
-    // var fontTextureUrl = 'fonts/courier.png'; // The path to your font image file
-
-    // // // Load the font texture
-    // var fontTextureAsset = new pc.Asset('fontTexture', 'texture', { url: fontTextureUrl });
-    // this._app.assets.add(fontTextureAsset);
-    // this._app.assets.load(fontTextureAsset);
-
-    this._initUI();
-    app.start();
+    setTimeout(() => {
+      
+      this._initUI();
+      app.start();
+    }, 1000);
   }
 
-  _resize() {
-    this._app.resizeCanvas();
+  _resize(canvas) {
+    this._app.resizeCanvas(canvas.width, canvas.height);
+    // app.resizeCanvas(canvas.width, canvas.height);
+
   }
 
   _initUI() {
@@ -75,38 +70,48 @@ export default class Game {
   }
 
   _initScene() {
-    const Rotate = pc.createScript('rotate');
-    Rotate.prototype.update = function (dt) {
-      this.entity.rotate(10 * dt, 20 * dt, 30 * dt);
-    };
-
-    const box = new pc.Entity('cube');
-    box.addComponent('model', {
-      type: 'box'
-    });
-
-    box.addComponent('script');
-    box.script.create('rotate');
-
-    this._app.root.addChild(box);
+    const scene = new Scene1();
+    this._app.root.addChild(scene); 
   }
 
   _initCamera() {
     const camera = new pc.Entity('camera');
     camera.addComponent('camera', {
-      clearColor: new pc.Color(1, 1, 1)
+      clearColor: new pc.Color(0.1, 0.1, 0.1)
     });
 
+    // if(this._enableOrbit) {
+    //   camera.addComponent("script");
+    //   camera.script.create("orbitCamera", {
+    //       attributes: {
+    //           inertiaFactor: 0.2
+    //       }
+    //   });
+    //   camera.script.create("orbitCameraInputMouse");
+    //   camera.script.create("orbitCameraInputTouch");
+    // }
+
     this._app.root.addChild(camera);
-    camera.setPosition(0, 0, 3);
+    camera.setPosition(1, 0.3, 3);
+    camera.lookAt(0, 0, 0);
   }
 
   _initLight() {
     const light = new pc.Entity('light');
-    light.addComponent('light');
+    light.addComponent('light', {
+      type: "directional",
+      color: new pc.Color(1, 1, 1),
+      intensity: 1,
+  });
 
     this._app.root.addChild(light);
     light.setEulerAngles(45, 0, 0);
+
+    const light2 = new pc.Entity('light');
+    light2.addComponent('light');
+
+    this._app.root.addChild(light2);
+    light2.setEulerAngles(0, 45, 0);
   }
 
   update(dt) {
