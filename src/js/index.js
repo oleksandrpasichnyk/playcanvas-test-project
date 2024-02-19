@@ -6,6 +6,8 @@ import Loader from './loader.js';
 import AssetsHelper from './libs/assets-helper.js';
 import Scene1 from './scene/scene1.js';
 import Scene2 from './scene/scene2.js';
+import Scene3 from './scene/scene3.js';
+
 // import './libs/orbit-camera.js';
 
 export default class Game {
@@ -20,7 +22,7 @@ export default class Game {
     this._init();
   }
 
-  _init() {
+  async _init() {
     const canvas = this._canvas = document.createElement('canvas');
     document.body.appendChild(canvas);
 
@@ -33,11 +35,22 @@ export default class Game {
         pc.TextureHandler,
         // @ts-ignore
         pc.FontHandler
+      ],
+      componentSystems: [
+        pc.RenderComponentSystem,
+        pc.CameraComponentSystem,
+        pc.LightComponentSystem,
+        pc.ScriptComponentSystem,
+        pc.CollisionComponentSystem,
+        pc.RigidBodyComponentSystem,
+        pc.AnimComponentSystem
       ]
     });
 
     app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
+    app.scene.exposure = 10;
+    app.scene.skyboxMip = 20;
 
     AssetsHelper.registerApp(app);
 
@@ -52,7 +65,10 @@ export default class Game {
     setTimeout(() => {
       this._initScene();
       this._initUI();
+
+      this._initPhysics();
       app.start();
+
     }, 1000);
   }
 
@@ -70,8 +86,12 @@ export default class Game {
   }
 
   _initScene() {
-    const scene = new Scene2();
+    const scene = new Scene3(this._app);
     this._app.root.addChild(scene); 
+  }
+
+  _initPhysics() {
+    this._app.systems.rigidbody.gravity.set(0, -9.81, 0);
   }
 
   _initCamera() {
