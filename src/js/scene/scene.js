@@ -24,14 +24,12 @@ export default class GameScene extends pc.Entity {
 
   onLeftClicked() {
     this._sceneIndex = this._sceneIndex == 1 ? this._scenesCount : this._sceneIndex - 1;
-    console.log(this._sceneIndex)
 
     this.setScene(this._sceneIndex);
   }
 
   onRightClicked() {
     this._sceneIndex = this._sceneIndex == this._scenesCount ? 1 : this._sceneIndex + 1;
-    console.log(this._sceneIndex)
 
     this.setScene(this._sceneIndex);
   }

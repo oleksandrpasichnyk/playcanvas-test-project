@@ -142,8 +142,6 @@ export default class Scene1 extends SceneAbstract {
       return;
     }
 
-    console.log(this._spheresPool.length)
-
     this._setSpheresCount(count);
     this._setSpheresPositions();
   }

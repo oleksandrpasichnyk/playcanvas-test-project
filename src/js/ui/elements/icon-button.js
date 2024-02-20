@@ -43,8 +43,6 @@ export default class IconButton extends pc.Entity {
   _onClick() {
     if (this._isTween) return;
 
-    console.log('_onClick')
-
     this.fire('click', this);
 
     this._animate();

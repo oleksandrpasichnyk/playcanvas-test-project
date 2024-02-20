@@ -26,7 +26,6 @@ export default class Counter extends pc.Entity {
   }
 
   _init() {
-    console.log('LocalStorageManager.exists(this._typeName)', LocalStorageManager.exists(this._typeName))
     if(!LocalStorageManager.exists(this._typeName)) {
       LocalStorageManager.set(this._typeName, { count: 0 });
     }

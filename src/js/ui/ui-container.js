@@ -23,6 +23,11 @@ export default class MyUIElement extends pc.Entity {
   onStarted() {
     this._startText.hide();
     this._sceneSwitcher.show();
+
+    this._settingsBtn.enabled = false;
+    this._coinsCounter.enabled = false;
+    this._diamondsCounter.enabled = false;
+    this._bg.enabled = false;
   }
 
   setSceneIndex(index) {
@@ -37,6 +42,7 @@ export default class MyUIElement extends pc.Entity {
       screenSpace: true,
     });
 
+    this._initBg();
     this._initSettingsBtn();
     this._initStartText();
     this._initSceneSwitcher();
@@ -47,6 +53,26 @@ export default class MyUIElement extends pc.Entity {
 
     this.resize();
     window.addEventListener("resize", () => this.resize());
+  }
+
+  _initBg() {
+    const bg = this._bg = new pc.Entity();
+    const iconAsset = AssetsHelper.getAssetByName('bg_image', 'texture');
+    
+    this._startBgWidth = iconAsset.resource.width;
+    this._startBgHeight = iconAsset.resource.height;
+    
+    bg.addComponent('element', {
+      type: pc.ELEMENTTYPE_IMAGE,
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      // width: this._startBgWidth,
+      // height: this._startBgHeight,
+      textureAsset: iconAsset,
+    });
+
+    this.addChild(bg);
+    this._resizeBg();
   }
 
   _initSettingsBtn() {
@@ -138,6 +164,23 @@ export default class MyUIElement extends pc.Entity {
     this._startText.setLocalPosition(0, -height * 0.15, 0);
 
     this._sceneSwitcher.setLocalPosition(0, -height * 0.4, 0);
+
+    this._resizeBg();
+  }
+
+  _resizeBg() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const scaleX = this._bg.element.width/this._startBgWidth;
+    const scaleY = this._bg.element.height/this._startBgHeight;
+
+    if(width > height) {
+      this._bg.element.width = width * 1.1;
+      this._bg.element.height = this._startBgHeight * scaleX * 1.1;
+    } else{
+      this._bg.element.height = height * 1.1;
+      this._bg.element.width = this._startBgWidth * scaleY * 1.1;
+    }
   }
 
   update(dt) {

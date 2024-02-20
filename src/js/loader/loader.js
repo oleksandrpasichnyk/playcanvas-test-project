@@ -70,6 +70,7 @@ export default class Loader {
       close: 'close.png',
       plus: 'plus.png',
       plus_white: 'plus_white.png',
+      bg_image: 'bg_image.jpg',
     }
 
     for (const imageName in images) {
