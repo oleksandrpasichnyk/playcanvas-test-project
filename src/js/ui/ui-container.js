@@ -2,6 +2,8 @@ import * as pc from "playcanvas";
 import IconButton from "./elements/icon-button.js";
 import AssetsHelper from "../libs/assets-helper.js";
 import SceneSwitcher from "./elements/screens-switcher.js";
+import * as TWEEN from '@tweenjs/tween.js'
+import StartText from "./elements/start-text.js";
 
 export default class MyUIElement extends pc.Entity {
   constructor(app, assets) {
@@ -16,8 +18,7 @@ export default class MyUIElement extends pc.Entity {
   }
 
   onStarted() {
-    this._startText.enabled = false;
-
+    this._startText.hide();
     this._sceneSwitcher.show();
   }
 
@@ -53,22 +54,9 @@ export default class MyUIElement extends pc.Entity {
   }
 
   _initStartText() {
-    const textEntity = this._startText = new pc.Entity('Text Entity');
-
-    textEntity.addComponent('element', {
-      type: 'text',
-      anchor: [0.5, 0.5, 0.5, 0.5],
-      pivot: [0.5, 0.5],
-      text: 'TAP TO START',
-      fontAsset: AssetsHelper.getAssetByName('font', 'font'),
-      fontSize: 32,
-      color: [1, 1, 1, 0.8],
-      width: 200,
-      height: 50,
-      alignment: pc.Vec2.ZERO
-    });
-
-    this.addChild(textEntity)
+    const startText = this._startText = new StartText();
+    this.addChild(startText);
+    startText.show();
   }
 
   _initSceneSwitcher() {
