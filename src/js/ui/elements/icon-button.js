@@ -4,11 +4,12 @@ import AssetsHelper from '../../libs/assets-helper.js';
 import * as TWEEN from '@tweenjs/tween.js'
 
 export default class IconButton extends pc.Entity {
-  constructor(icon = null) {
+  constructor(icon = null, needBg = true) {
     super();
 
     this._icon = icon;
     this.useInput = true;
+    this._needBg = needBg;
 
     this._isTween = false;
 
@@ -21,7 +22,18 @@ export default class IconButton extends pc.Entity {
       transitionMode: pc.BUTTON_TRANSITION_MODE_SPRITE_CHANGE
     });
 
-    this._initBg();
+    if(this._needBg){
+      this._initBg();
+    }else{
+      this.addComponent('element', {
+        anchor: [0.5, 0.5, 0.5, 0.5],
+        pivot: [0.5, 0.5],
+        width: 80,
+        height: 80,
+        useInput: true,
+      });
+    }
+    
     this._initIcon();
 
     this.button.useInput = true;
@@ -30,6 +42,8 @@ export default class IconButton extends pc.Entity {
 
   _onClick() {
     if (this._isTween) return;
+
+    console.log('_onClick')
 
     this.fire('click', this);
 

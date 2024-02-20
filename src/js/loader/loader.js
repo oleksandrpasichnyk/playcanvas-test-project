@@ -62,6 +62,8 @@ export default class Loader {
       bg: 'bg.png',
       particle: 'particle.png',
       arrow: 'arrow.png',
+      popup_bg: 'popup_bg.png',
+      close: 'close.png',
     }
 
     for (const imageName in images) {

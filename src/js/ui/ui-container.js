@@ -4,6 +4,7 @@ import AssetsHelper from "../libs/assets-helper.js";
 import SceneSwitcher from "./elements/screens-switcher.js";
 import * as TWEEN from '@tweenjs/tween.js'
 import StartText from "./elements/start-text.js";
+import SettingsPopup from "./popups/settings-popup.js";
 
 export default class MyUIElement extends pc.Entity {
   constructor(app, assets) {
@@ -38,6 +39,7 @@ export default class MyUIElement extends pc.Entity {
     this._initShopBtn();
     this._initStartText();
     this._initSceneSwitcher();
+    this._initSettingsPopup();
 
     this.resize();
     window.addEventListener("resize", () => this.resize());
@@ -46,6 +48,11 @@ export default class MyUIElement extends pc.Entity {
   _initSettingsBtn() {
     const settingsBtn = this._settingsBtn = new IconButton("settings");
     this.addChild(settingsBtn);
+
+    this._settingsBtn.on('click', () => {
+      this._settingsPopup.show();
+      this._onPopupShow();
+    })
   }
 
   _initShopBtn() {
@@ -69,6 +76,15 @@ export default class MyUIElement extends pc.Entity {
       console.log('direction: ' + direction)
       this.fire("changeScene", direction);
     })
+  }
+
+  _initSettingsPopup() {
+    const settingsPopup = this._settingsPopup = new SettingsPopup();
+    this.addChild(settingsPopup);
+  }
+
+  _onPopupShow() {
+
   }
 
   resize() {
