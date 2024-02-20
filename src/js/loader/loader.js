@@ -60,10 +60,12 @@ export default class Loader {
       coin: 'coin.png',
       diamond: 'diamond.png',
       bg: 'bg.png',
+      bg2: 'bg2.png',
       particle: 'particle.png',
       arrow: 'arrow.png',
       popup_bg: 'popup_bg.png',
       close: 'close.png',
+      plus: 'plus.png',
     }
 
     for (const imageName in images) {

@@ -5,6 +5,8 @@ import SceneSwitcher from "./elements/screens-switcher.js";
 import * as TWEEN from '@tweenjs/tween.js'
 import StartText from "./elements/start-text.js";
 import SettingsPopup from "./popups/settings-popup.js";
+import Counter from "./elements/counter.js";
+import ShopPopup from "./popups/shop-popup.js";
 
 export default class MyUIElement extends pc.Entity {
   constructor(app, assets) {
@@ -36,10 +38,11 @@ export default class MyUIElement extends pc.Entity {
     });
 
     this._initSettingsBtn();
-    this._initShopBtn();
     this._initStartText();
     this._initSceneSwitcher();
     this._initSettingsPopup();
+    this._initCoinsCounter();
+    this._initDiamondsCounter();
 
     this.resize();
     window.addEventListener("resize", () => this.resize());
@@ -55,11 +58,6 @@ export default class MyUIElement extends pc.Entity {
     })
   }
 
-  _initShopBtn() {
-    const shopBtn = this._shopBtn = new IconButton("coin");
-    this.addChild(shopBtn);
-  }
-
   _initStartText() {
     const startText = this._startText = new StartText();
     this.addChild(startText);
@@ -73,7 +71,6 @@ export default class MyUIElement extends pc.Entity {
     sceneSwitcher.hide();
 
     sceneSwitcher.on('click', (direction) => {
-      console.log('direction: ' + direction)
       this.fire("changeScene", direction);
     })
   }
@@ -81,6 +78,29 @@ export default class MyUIElement extends pc.Entity {
   _initSettingsPopup() {
     const settingsPopup = this._settingsPopup = new SettingsPopup();
     this.addChild(settingsPopup);
+  }
+
+  _initSettingsPopup() {
+    const shopPopup = this._shopPopup = new ShopPopup();
+    this.addChild(shopPopup);
+  }
+
+  _initCoinsCounter() {
+    const coinsCounter = this._coinsCounter = new Counter("coin");
+    this.addChild(coinsCounter);
+
+    coinsCounter.on('click', () => {
+      this._shopPopup.show();
+    });
+  }
+
+  _initDiamondsCounter() {
+    const diamondsCounter = this._diamondsCounter = new Counter("diamond");
+    this.addChild(diamondsCounter);
+
+    diamondsCounter.on('click', () => {
+      this._shopPopup.show();
+    });
   }
 
   _onPopupShow() {
@@ -104,7 +124,8 @@ export default class MyUIElement extends pc.Entity {
     const offset = 70;
 
     this._settingsBtn.setLocalPosition(-width * 0.5 + offset, height * 0.5 - offset, 0);
-    this._shopBtn.setLocalPosition(width * 0.5 - offset, height * 0.5 - offset, 0);
+    this._coinsCounter.setLocalPosition(width * 0.5 - offset - 300, height * 0.5 - offset, 0);
+    this._diamondsCounter.setLocalPosition(width * 0.5 - offset - 60, height * 0.5 - offset, 0);
     this._startText.setLocalPosition(0, -height * 0.15, 0);
 
     this._sceneSwitcher.setLocalPosition(0, -height * 0.4, 0);
