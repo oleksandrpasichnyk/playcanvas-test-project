@@ -3,16 +3,18 @@ import Icon from './icon.js';
 import AssetsHelper from '../../libs/assets-helper.js';
 import * as TWEEN from '@tweenjs/tween.js'
 import IconButton from './icon-button.js';
+import LocalStorageManager from '../../libs/local-storage-manager.js';
 
 export default class Counter extends pc.Entity {
-  constructor(icon = null) {
+  constructor(iconName = null, typeName) {
     super();
 
-    this._icon = icon;
+    this._typeName = typeName;
+    this._iconName = iconName;
     this.useInput = true;
 
     this._isTween = false;
-    this._count = 0; // get from local storage
+    this._count = 0;
 
     this._init();
   }
@@ -20,11 +22,17 @@ export default class Counter extends pc.Entity {
   increase() {
     this._count++;
     this._text.element.text = this._count;
-
-    // save local storage
+    LocalStorageManager.update(this._typeName, { count: this._count });
   }
 
   _init() {
+    console.log('LocalStorageManager.exists(this._typeName)', LocalStorageManager.exists(this._typeName))
+    if(!LocalStorageManager.exists(this._typeName)) {
+      LocalStorageManager.set(this._typeName, { count: 0 });
+    }
+
+    this._count = LocalStorageManager.get(this._typeName).count;
+
     this._initBg();
     
     this._initIcon();
@@ -77,7 +85,7 @@ export default class Counter extends pc.Entity {
   }
 
   _initIcon() {
-    const icon = new Icon(this._icon);
+    const icon = new Icon(this._iconName);
     this.addChild(icon);
 
     icon.setLocalScale(0.8, 0.8, 0.8);

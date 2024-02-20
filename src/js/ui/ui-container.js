@@ -93,7 +93,7 @@ export default class MyUIElement extends pc.Entity {
   }
 
   _initCoinsCounter() {
-    const coinsCounter = this._coinsCounter = new Counter("coin");
+    const coinsCounter = this._coinsCounter = new Counter("coin", "coins");
     this.addChild(coinsCounter);
 
     coinsCounter.on('click', () => {
@@ -103,7 +103,7 @@ export default class MyUIElement extends pc.Entity {
   }
 
   _initDiamondsCounter() {
-    const diamondsCounter = this._diamondsCounter = new Counter("diamond");
+    const diamondsCounter = this._diamondsCounter = new Counter("diamond", "diamonds");
     this.addChild(diamondsCounter);
 
     diamondsCounter.on('click', () => {
