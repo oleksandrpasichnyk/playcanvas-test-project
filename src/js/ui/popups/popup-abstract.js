@@ -16,7 +16,7 @@ export default class PopupAbstract extends pc.Entity {
     if(this._isTween || this._isEnable) {
       return;
     }
-
+    
     this._isTween = true;
 
     this.enabled = true;
@@ -34,8 +34,17 @@ export default class PopupAbstract extends pc.Entity {
       });
   }
 
-  hide() {
-    if(this._isTween) {
+  hide(isForce = false) {
+    if(isForce) {
+      this._isTween = false;
+
+      this.enabled = false;
+      this._isEnable = false;
+
+      return;
+    }
+
+    if(this._isTween || !this._isEnable) {
       return;
     }
 

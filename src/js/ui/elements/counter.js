@@ -5,72 +5,31 @@ import * as TWEEN from '@tweenjs/tween.js'
 import IconButton from './icon-button.js';
 
 export default class Counter extends pc.Entity {
-  constructor(icon = null, needBg = true) {
+  constructor(icon = null) {
     super();
 
     this._icon = icon;
     this.useInput = true;
-    this._needBg = needBg;
 
     this._isTween = false;
-    this._count = 100;
+    this._count = 0; // get from local storage
 
     this._init();
   }
 
-  _init() {
-    // this.addComponent("element", {
-    //   anchor: [0.5, 0.5, 0.5, 0.5],
-    //   pivot: [0.5, 0.5],
-    // });
+  increase() {
+    this._count++;
+    this._text.element.text = this._count;
 
+    // save local storage
+  }
+
+  _init() {
     this._initBg();
     
     this._initIcon();
     this._initPlusBtn();
     this._initText();
-
-    // this.button.useInput = true;
-    // this.button.on('click', this._onClick, this);
-  }
-
-  _onClick() {
-    if (this._isTween) return;
-
-    console.log('_onClick')
-
-    this.fire('click', this);
-
-    this._animate();
-  }
-
-  _animate() {
-    if (this._isTween) return;
-
-    this._isTween = true;
-
-    const entity = this; // Reference to the entity for use in callbacks
-    const startScale = this.getLocalScale().x;
-    const targetScale = startScale * 1.1;
-
-    const scaleInTween = new TWEEN.Tween({ scale: startScale })
-      .to({ scale: targetScale }, 150)
-      .easing(TWEEN.Easing.Cubic.Out)
-      .onUpdate(function (data) {
-        entity.setLocalScale(data.scale, data.scale, 1);
-      });
-
-    const scaleOutTween = new TWEEN.Tween({ scale: targetScale })
-      .to({ scale: startScale }, 100)
-      .easing(TWEEN.Easing.Cubic.Out)
-      .onUpdate(function (data) {
-        entity.setLocalScale(data.scale, data.scale, 1);
-      })
-
-    // Scale up
-    scaleInTween.start();
-    scaleInTween.onComplete(() => scaleOutTween.start());
-    scaleOutTween.onComplete(() => this._isTween = false);
   }
 
   _initBg() {
@@ -113,7 +72,7 @@ export default class Counter extends pc.Entity {
       alignment: pc.Vec2.LEFT
     });
 
-    textEntity.setLocalPosition(-35, -3, 0)
+    textEntity.setLocalPosition(-30, -3, 0)
     this.addChild(textEntity);
   }
 

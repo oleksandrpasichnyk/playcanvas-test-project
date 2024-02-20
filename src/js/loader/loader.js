@@ -59,13 +59,17 @@ export default class Loader {
       settings: 'settings.png',
       coin: 'coin.png',
       diamond: 'diamond.png',
+      coin_white: 'coin_white.png',
+      diamond_white: 'diamond_white.png',
       bg: 'bg.png',
       bg2: 'bg2.png',
+      bg2_green: 'bg2_green.png',
       particle: 'particle.png',
       arrow: 'arrow.png',
       popup_bg: 'popup_bg.png',
       close: 'close.png',
       plus: 'plus.png',
+      plus_white: 'plus_white.png',
     }
 
     for (const imageName in images) {

@@ -43,6 +43,7 @@ export default class MyUIElement extends pc.Entity {
     this._initSettingsPopup();
     this._initCoinsCounter();
     this._initDiamondsCounter();
+    this._initShopPopup();
 
     this.resize();
     window.addEventListener("resize", () => this.resize());
@@ -54,6 +55,7 @@ export default class MyUIElement extends pc.Entity {
 
     this._settingsBtn.on('click', () => {
       this._settingsPopup.show();
+      this._shopPopup.hide(true);
       this._onPopupShow();
     })
   }
@@ -62,6 +64,8 @@ export default class MyUIElement extends pc.Entity {
     const startText = this._startText = new StartText();
     this.addChild(startText);
     startText.show();
+
+    startText.on('click', () => this.fire('first_click'))
   }
 
   _initSceneSwitcher() {
@@ -80,9 +84,12 @@ export default class MyUIElement extends pc.Entity {
     this.addChild(settingsPopup);
   }
 
-  _initSettingsPopup() {
+  _initShopPopup() {
     const shopPopup = this._shopPopup = new ShopPopup();
     this.addChild(shopPopup);
+
+    shopPopup.on('click_diamond', () => this._diamondsCounter.increase());
+    shopPopup.on('click_coin', () => this._coinsCounter.increase());
   }
 
   _initCoinsCounter() {
@@ -91,6 +98,7 @@ export default class MyUIElement extends pc.Entity {
 
     coinsCounter.on('click', () => {
       this._shopPopup.show();
+      this._settingsPopup.hide(true);
     });
   }
 
@@ -100,6 +108,7 @@ export default class MyUIElement extends pc.Entity {
 
     diamondsCounter.on('click', () => {
       this._shopPopup.show();
+      this._settingsPopup.hide(true);
     });
   }
 

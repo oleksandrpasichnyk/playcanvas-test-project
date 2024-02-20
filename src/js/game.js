@@ -72,11 +72,6 @@ export default class Game {
       this._initScene();
       this._initUI();
 
-      this._app.mouse.on(pc.EVENT_MOUSEDOWN, () => {
-        this._UI.onStarted();
-        this._gameScene.setScene(this._sceneIndex);
-      })
-
       app.start();
     }, 1000);
   }
@@ -89,6 +84,11 @@ export default class Game {
     const app = this._app;
     const UI = this._UI = new UIGroup(app, this._assets);
     app.root.addChild(UI);
+
+    this._UI.on('first_click', () => {
+      this._UI.onStarted();
+      this._gameScene.setScene(this._sceneIndex);
+    })
 
     this._UI.on('changeScene', (direction) => {
       let newSceneIndex;
