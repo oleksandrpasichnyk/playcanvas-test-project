@@ -44,7 +44,7 @@ export default class Loader {
     const app = this._app;
 
     const iconAsset = new pc.Asset(name, 'texture', {
-      url: 'icons/' + path
+      url: 'images/' + path
     });
     app.assets.add(iconAsset);
     app.assets.load(iconAsset);
@@ -63,7 +63,7 @@ export default class Loader {
       diamond_white: 'diamond_white.png',
       bg: 'bg.png',
       bg2: 'bg2.png',
-      bg2_green: 'bg2_green.png',
+      bg2_color: 'bg2_color.png',
       particle: 'particle.png',
       arrow: 'arrow.png',
       popup_bg: 'popup_bg.png',

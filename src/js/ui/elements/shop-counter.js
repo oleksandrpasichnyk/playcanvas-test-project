@@ -69,7 +69,7 @@ export default class ShopCounter extends pc.Entity {
   }
 
   _initBg() {
-    const bgAsset = AssetsHelper.getAssetByName('bg2_green', 'texture');
+    const bgAsset = AssetsHelper.getAssetByName('bg2_color', 'texture');
 
     this.addComponent('element', {
       type: pc.ELEMENTTYPE_IMAGE,

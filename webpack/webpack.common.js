@@ -18,7 +18,7 @@ const webpackCommon = {
             patterns: [
                 { from: "assets/fonts", to: "fonts" },
                 { from: "assets/atlas", to: "atlas" },
-                { from: "assets/icons", to: "icons" },
+                { from: "assets/images", to: "images" },
                 { from: "assets/scripts", to: "scripts" },
             ],
         }),
