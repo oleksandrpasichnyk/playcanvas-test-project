@@ -1,6 +1,7 @@
 import * as pc from 'playcanvas';
 import Icon from './icon.js';
 import AssetsHelper from '../../libs/assets-helper.js';
+import * as TWEEN from '@tweenjs/tween.js'
 
 export default class IconButton extends pc.Entity {
   constructor(icon = null) {
@@ -8,6 +9,8 @@ export default class IconButton extends pc.Entity {
 
     this._icon = icon;
     this.useInput = true;
+
+    this._isTween = false;
 
     this._init();
   }
@@ -23,20 +26,43 @@ export default class IconButton extends pc.Entity {
 
     this.button.useInput = true;
     this.button.on('click', this._onClick, this);
-
-    // const scale = this.getLocalScale();
-
-    // this.button.on(pc.EVENT_MOUSEDOWN, () => {
-    //   this.setLocalScale(scale.clone().mulScalar(1.1));
-    // });
-    // this.button.on(pc.EVENT_MOUSEUP, () => {
-    //   this.setLocalScale(scale);
-    // });
   }
 
   _onClick() {
-    console.log('click1')
-    this.fire('click1', this);
+    if (this._isTween) return;
+
+    this.fire('click', this);
+
+    this._animate();
+  }
+
+  _animate() {
+    if (this._isTween) return;
+
+    this._isTween = true;
+
+    const entity = this; // Reference to the entity for use in callbacks
+    const startScale = this.getLocalScale().x;
+    const targetScale = startScale * 1.1;
+
+    const scaleInTween = new TWEEN.Tween({ scale: startScale })
+      .to({ scale: targetScale }, 150)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(function (data) {
+        entity.setLocalScale(data.scale, data.scale, 1);
+      });
+
+    const scaleOutTween = new TWEEN.Tween({ scale: targetScale })
+      .to({ scale: startScale }, 100)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(function (data) {
+        entity.setLocalScale(data.scale, data.scale, 1);
+      })
+
+    // Scale up
+    scaleInTween.start();
+    scaleInTween.onComplete(() => scaleOutTween.start());
+    scaleOutTween.onComplete(() => this._isTween = false);
   }
 
   _initBg() {

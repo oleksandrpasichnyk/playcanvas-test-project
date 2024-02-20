@@ -2,13 +2,12 @@ import "../style.css";
 
 import * as pc from "playcanvas";
 import * as CANNON from "cannon";
-import CannonDebugger from "cannon-es-debugger";
 
 import UIGroup from "./ui/ui-container.js";
 import Loader from "./loader/loader.js";
 import AssetsHelper from "./libs/assets-helper.js";
 import GameScene from "./scene/scene.js";
-
+import * as TWEEN from '@tweenjs/tween.js'
 
 // import './libs/orbit-camera.js';
 
@@ -19,6 +18,8 @@ export default class Game {
     this._assets = null;
 
     this._enableOrbit = true;
+    this._sceneIndex = 1;
+    this._scenesCount = 3;
 
     this._init();
   }
@@ -55,24 +56,25 @@ export default class Game {
     app.scene.exposure = 0.8;
     // app.scene.skyboxMip = 20;
 
+    
     AssetsHelper.registerApp(app);
-
+    
     window.addEventListener("resize", () => this._resize(canvas));
     app.on("update", (dt) => this.update(dt));
-
+    
     this._initLight();
     this._initCamera();
-
+    
     new Loader(app);
-
+    
     setTimeout(() => {
       this._initPhysics();
       this._initScene();
       this._initUI();
 
       this._app.mouse.on(pc.EVENT_MOUSEDOWN, () => {
-        // this._UI.onStarted();
-        // this._gameScene.setScene(1);
+        this._UI.onStarted();
+        this._gameScene.setScene(this._sceneIndex);
       })
 
       app.start();
@@ -87,6 +89,21 @@ export default class Game {
     const app = this._app;
     const UI = this._UI = new UIGroup(app, this._assets);
     app.root.addChild(UI);
+
+    this._UI.on('changeScene', (direction) => {
+      let newSceneIndex;
+      const { _sceneIndex: sceneIndex, _scenesCount: scenesCount } = this;
+
+      if(direction == "left") {
+        newSceneIndex = sceneIndex == 1 ? scenesCount : sceneIndex - 1;
+      }else {
+        newSceneIndex = sceneIndex == scenesCount ? 1 : sceneIndex + 1;
+      }
+
+      this._sceneIndex = newSceneIndex;
+      this._gameScene.setScene(newSceneIndex);
+      this._UI.setSceneIndex(newSceneIndex);
+    })
   }
 
   _initScene() {
@@ -133,6 +150,7 @@ export default class Game {
 
   update(dt) {
     this._physicsWorld?.step(dt);
+    TWEEN.update();
   }
 }
 

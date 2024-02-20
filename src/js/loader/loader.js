@@ -14,7 +14,7 @@ export default class Loader {
     const app = this._app;
 
     const assets = {
-      script: new pc.Asset('script', 'script', { url: 'scripts/orbit-camera.js' })
+      script: new pc.Asset('script', 'script', { url: 'scripts/tween.js' })
     };
 
     function loadAssets(assetList, assetRegistry) {
@@ -25,9 +25,11 @@ export default class Loader {
     }
     await loadAssets(Object.values(assets), app.assets);
 
-    // const scriptAsset = new pc.Asset('script', 'script', { url: 'scripts/orbit-camera.js' });
-    // app.assets.add(scriptAsset);
-    // app.assets.load(scriptAsset);
+    // const app = this._app;
+
+    // const fontAsset = new pc.Asset('script', 'script', { url: 'scripts/tween.js' });
+    // app.assets.add(fontAsset);
+    // app.assets.load(fontAsset);
   }
 
   _loadFonts() {

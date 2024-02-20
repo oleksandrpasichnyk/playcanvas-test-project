@@ -6,7 +6,26 @@ export default class Scene2 extends SceneAbstract {
   constructor() {
     super();
 
+    this._particleSystems = [];
+
     this._init();
+  }
+
+  enable() {
+    super.enable();
+    this._particleSystems.forEach(particleSystem => {
+      particleSystem.particlesystem.enabled = true;
+      particleSystem.particlesystem.play();
+    });
+  }
+
+  disable() {
+    super.disable();
+
+    this._particleSystems.forEach(particleSystem => {
+      particleSystem.particlesystem.reset();
+      particleSystem.particlesystem.enabled = false;
+    });
   }
 
   _init() {
@@ -75,5 +94,7 @@ export default class Scene2 extends SceneAbstract {
       localVelocityGraph: localVelocityCurve,
       localVelocityGraph2: localVelocityCurve2,
     });
+
+    this._particleSystems.push(particleSystem);
   }
 }

@@ -16,10 +16,29 @@ export default class GameScene extends pc.Entity {
 
     this._scenesData = {};
 
+    this._sceneIndex = 1;
+    this._scenesCount = 3;
+
     this._init();
   }
 
-  setScene(index) {
+  onLeftClicked() {
+    this._sceneIndex = this._sceneIndex == 1 ? this._scenesCount : this._sceneIndex - 1;
+    console.log(this._sceneIndex)
+
+    this.setScene(this._sceneIndex);
+  }
+
+  onRightClicked() {
+    this._sceneIndex = this._sceneIndex == this._scenesCount ? 1 : this._sceneIndex + 1;
+    console.log(this._sceneIndex)
+
+    this.setScene(this._sceneIndex);
+  }
+
+  setScene(index = this._sceneIndex) {
+    this._sceneIndex = index;
+
     for (const key in this._scenesData) {
       const scene = this._scenesData[key];
 

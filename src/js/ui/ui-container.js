@@ -17,6 +17,12 @@ export default class MyUIElement extends pc.Entity {
 
   onStarted() {
     this._startText.enabled = false;
+
+    this._sceneSwitcher.show();
+  }
+
+  setSceneIndex(index) {
+    this._sceneSwitcher.setSceneIndex(index);
   }
 
   _init() {
@@ -68,6 +74,13 @@ export default class MyUIElement extends pc.Entity {
   _initSceneSwitcher() {
     const sceneSwitcher = this._sceneSwitcher = new SceneSwitcher();
     this.addChild(sceneSwitcher);
+
+    sceneSwitcher.hide();
+
+    sceneSwitcher.on('click', (direction) => {
+      console.log('direction: ' + direction)
+      this.fire("changeScene", direction);
+    })
   }
 
   resize() {
@@ -89,7 +102,8 @@ export default class MyUIElement extends pc.Entity {
     this._settingsBtn.setLocalPosition(-width * 0.5 + offset, height * 0.5 - offset, 0);
     this._shopBtn.setLocalPosition(width * 0.5 - offset, height * 0.5 - offset, 0);
     this._startText.setLocalPosition(0, -height * 0.15, 0);
-    this._sceneSwitcher.setLocalPosition(0, -height * 0.5, 0);
+
+    this._sceneSwitcher.setLocalPosition(0, -height * 0.4, 0);
   }
 
   update(dt) {
